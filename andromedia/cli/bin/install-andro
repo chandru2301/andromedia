@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT_PATH}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+TARGET_BIN_DIR="${HOME}/.local/bin"
+TARGET_LINK="${TARGET_BIN_DIR}/andro"
+
+if ! command -v mvn >/dev/null 2>&1; then
+  echo "Maven not found on PATH." >&2
+  echo "Install Maven and rerun this script." >&2
+  exit 1
+fi
+
+echo "Building CLI jar..."
+mvn -pl cli -am package -DskipTests -f "${PROJECT_ROOT}/pom.xml"
+
+echo "Ensuring launcher is executable..."
+chmod +x "${PROJECT_ROOT}/cli/bin/andro"
+
+echo "Installing launcher symlink at ${TARGET_LINK}..."
+mkdir -p "${TARGET_BIN_DIR}"
+ln -sf "${PROJECT_ROOT}/cli/bin/andro" "${TARGET_LINK}"
+
+echo
+echo "Installed: ${TARGET_LINK}"
+if [[ ":${PATH}:" != *":${TARGET_BIN_DIR}:"* ]]; then
+  echo "Add this to your shell profile (for bash, usually ~/.bashrc):"
+  echo "export PATH=\"${TARGET_BIN_DIR}:\$PATH\""
+fi
+echo "Verify with:"
+echo "  andro --help"
+echo "  andro version"

@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "channels": [
+    {
+      "id": "C001",
+      "name": "backend-eng",
+      "is_member": true
+    },
+    {
+      "id": "C002",
+      "name": "random",
+      "is_member": true
+    }
+  ]
+}

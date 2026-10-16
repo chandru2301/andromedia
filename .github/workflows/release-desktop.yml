@@ -1,0 +1,159 @@
+# Builds the andro desktop app for Linux, Windows and macOS and publishes the
+# installers to a GitHub Release.
+#
+# electron-builder cannot cross-compile, so each OS builds on its own runner.
+#
+# Trigger: push a tag (`git tag v0.1.0 && git push origin v0.1.0`), or run it
+# manually from the Actions tab with a version to produce a draft release.
+#
+# Installers are published to a SEPARATE PUBLIC repo (chandruSofttwig/andro-releases)
+# so downloads work for anyone while this source repo stays private. Release assets
+# on a private repo need an authenticated token, so a public download link would 404.
+#
+# Required repository secrets:
+#   ANDRO_CLERK_PUBLISHABLE_KEY  Clerk *production* publishable key (pk_live_...).
+#                                Without it Trial sign-in is dead in the build,
+#                                so the job fails fast rather than shipping it.
+#   ANDRO_RELEASES_TOKEN         Fine-grained PAT with `contents: write` on the
+#                                releases repo ONLY. The built-in GITHUB_TOKEN is
+#                                scoped to this repo and cannot publish elsewhere.
+
+name: Release desktop app
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to build (e.g. 0.1.0)"
+        required: true
+
+# Publishing happens in the separate releases repo via ANDRO_RELEASES_TOKEN,
+# so this workflow only needs to read its own source.
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: linux
+          - os: windows-latest
+            name: windows
+          - os: macos-latest
+            name: macos
+
+    runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        working-directory: andro
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: andro/package-lock.json
+
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Building andro $VERSION"
+
+      - name: Fail fast on missing secrets
+        shell: bash
+        env:
+          CLERK_KEY: ${{ secrets.ANDRO_CLERK_PUBLISHABLE_KEY }}
+          RELEASES_TOKEN: ${{ secrets.ANDRO_RELEASES_TOKEN }}
+        run: |
+          if [ -z "$RELEASES_TOKEN" ]; then
+            echo "::error::ANDRO_RELEASES_TOKEN is not set. Installers publish to the"
+            echo "::error::public releases repo, which the built-in GITHUB_TOKEN cannot"
+            echo "::error::write to. Create a fine-grained PAT with contents:write on"
+            echo "::error::chandruSofttwig/andro-releases and add it as a secret."
+            exit 1
+          fi
+          if [ -z "$CLERK_KEY" ]; then
+            echo "::error::ANDRO_CLERK_PUBLISHABLE_KEY is not set. A build without it"
+            echo "::error::ships an app where Trial sign-in cannot work. Add the secret"
+            echo "::error::(Settings -> Secrets -> Actions) before releasing."
+            exit 1
+          fi
+          case "$CLERK_KEY" in
+            pk_test_*)
+              echo "::error::ANDRO_CLERK_PUBLISHABLE_KEY is a pk_test_ key. Test instances"
+              echo "::error::are rate limited and show dev banners. Use the pk_live_ key."
+              exit 1
+              ;;
+          esac
+
+      - name: Preflight — can the token publish to the releases repo?
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.ANDRO_RELEASES_TOKEN }}
+        run: |
+          # Seconds now beats a 403 after a ~10 minute build on three runners.
+          # `permissions.push` reflects what THIS token may do on that repo.
+          REPO="chandruSofttwig/andro-releases"
+          if ! CAN_PUSH=$(gh api "repos/$REPO" --jq '.permissions.push' 2>&1); then
+            echo "::error::ANDRO_RELEASES_TOKEN cannot read $REPO:"
+            echo "::error::$CAN_PUSH"
+            echo "::error::Check the PAT has repository access to $REPO and has not expired."
+            exit 1
+          fi
+          if [ "$CAN_PUSH" != "true" ]; then
+            echo "::error::ANDRO_RELEASES_TOKEN can read $REPO but cannot write to it."
+            echo "::error::Give the fine-grained PAT 'Contents: Read and write' on $REPO."
+            exit 1
+          fi
+          echo "Token can publish releases to $REPO."
+
+      - name: Write build-time env
+        shell: bash
+        env:
+          CLERK_KEY: ${{ secrets.ANDRO_CLERK_PUBLISHABLE_KEY }}
+        run: |
+          # .env.production.local wins over the committed .env.production and is
+          # gitignored, so the secret never lands in the tree.
+          echo "VITE_CLERK_PUBLISHABLE_KEY=$CLERK_KEY" > .env.production.local
+
+      - name: Set package version
+        shell: bash
+        run: npm version "${{ steps.version.outputs.version }}" --no-git-tag-version --allow-same-version
+
+      - run: npm ci
+
+      - name: Build and publish installers
+        shell: bash
+        env:
+          # PAT, not GITHUB_TOKEN: the release lands in the separate public repo
+          # named by build.publish in andro/package.json.
+          GH_TOKEN: ${{ secrets.ANDRO_RELEASES_TOKEN }}
+          # No signing identity in CI — builds are unsigned (see andromedia/docs/desktop-distribution.md).
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+        run: npm run electron:release
+
+      - name: Upload installers as workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: andro-${{ matrix.name }}
+          path: |
+            andro/release/*.AppImage
+            andro/release/*.exe
+            andro/release/*.dmg
+          if-no-files-found: error

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(cd "$(dirname "${SCRIPT_PATH}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+JAR_PATH="${PROJECT_ROOT}/cli/target/andromedia-cli-0.1.0-SNAPSHOT.jar"
+
+if ! command -v java >/dev/null 2>&1; then
+  echo "Java runtime not found on PATH." >&2
+  echo "Install Java 21+ and ensure the 'java' command is available." >&2
+  exit 1
+fi
+
+if [[ ! -f "${JAR_PATH}" ]]; then
+  echo "Andromedia CLI jar not found at: ${JAR_PATH}" >&2
+  echo "Build it first with: mvn -pl cli package" >&2
+  exit 1
+fi
+
+if [[ -n "${ANDROMEDIA_JAVA_OPTS:-}" ]]; then
+  # shellcheck disable=SC2206
+  JAVA_OPTS=( ${ANDROMEDIA_JAVA_OPTS} )
+else
+  JAVA_OPTS=(--enable-native-access=ALL-UNNAMED)
+fi
+
+exec java "${JAVA_OPTS[@]}" -jar "${JAR_PATH}" "$@"

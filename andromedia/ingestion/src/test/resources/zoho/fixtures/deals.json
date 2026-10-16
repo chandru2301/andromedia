@@ -1,0 +1,69 @@
+{
+  "data": [
+    {
+      "id": "1001",
+      "Deal_Name": "Acme Platform Renewal",
+      "Stage": "Negotiation",
+      "Amount": 120000,
+      "Expected_Revenue": 100000,
+      "Probability": 60,
+      "Closing_Date": "2026-08-15",
+      "Description": "Renewal discussion with procurement. They want 15% discount tied to multi-year commit.",
+      "Modified_Time": "2026-07-10T10:30:00+05:30",
+      "Owner": { "id": "9", "name": "Alice Owner" },
+      "Lead_Source": "Partner",
+      "Account_Name": { "id": "2001", "name": "Acme Corp" },
+      "Contact_Name": { "id": "3001", "name": "Ravi Kumar" }
+    },
+    {
+      "id": "1002",
+      "Deal_Name": "Infosys Pilot",
+      "Stage": "Qualification",
+      "Amount": 45000,
+      "Expected_Revenue": 40000,
+      "Probability": 20,
+      "Closing_Date": "2026-09-01",
+      "Description": "",
+      "Modified_Time": "2026-06-20T14:00:00+05:30",
+      "Account_Name": { "id": "2002", "name": "Infosys Ltd" }
+    },
+    {
+      "id": "1003",
+      "Deal_Name": "Test Deal Demo",
+      "Stage": "Prospecting",
+      "Amount": 1000,
+      "Closing_Date": "2026-07-01",
+      "Description": "sample record for QA",
+      "Modified_Time": "2026-01-05T09:00:00+05:30",
+      "Account_Name": { "id": "2003", "name": "Demo Co" }
+    },
+    {
+      "id": "1004",
+      "Deal_Name": "Softtwig Expansion",
+      "Stage": "Closed Won",
+      "Amount": 80000,
+      "Expected_Revenue": 80000,
+      "Probability": 100,
+      "Closing_Date": "2026-05-18",
+      "Description": "Expanded seats after successful pilot. Champion: Priya.",
+      "Modified_Time": "2026-07-08T16:45:00+05:30",
+      "Account_Name": { "id": "2004", "name": "Softtwig Technologies" },
+      "Contact_Name": { "id": "3002", "name": "Priya Nair" }
+    },
+    {
+      "id": "1005",
+      "Deal_Name": "CRM License Renewal",
+      "Stage": "Qualification",
+      "Amount": 250000,
+      "Expected_Revenue": 250000,
+      "Probability": 40,
+      "Closing_Date": "2026-07-24",
+      "Description": "Annual CRM subscription renewal.",
+      "Next_Step": "Schedule product demo",
+      "Modified_Time": "2026-07-16T10:00:00+05:30",
+      "Account_Name": { "id": "2005", "name": "TechNova Solutions" },
+      "Contact_Name": { "id": "3001", "name": "Ravi Kumar" }
+    }
+  ],
+  "info": { "page": 1, "per_page": 200, "count": 5, "more_records": false }
+}

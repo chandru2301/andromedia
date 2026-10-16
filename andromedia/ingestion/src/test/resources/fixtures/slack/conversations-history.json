@@ -1,0 +1,36 @@
+{
+  "ok": true,
+  "messages": [
+    {
+      "type": "message",
+      "user": "U001",
+      "text": "why are we seeing timeout cascades on the payment service every evening?",
+      "ts": "1718366400.000100",
+      "reply_count": 2,
+      "reactions": [
+        { "name": "+1", "count": 5 },
+        { "name": "white_check_mark", "count": 2 }
+      ]
+    },
+    {
+      "type": "message",
+      "user": "U003",
+      "text": "standup notes for today",
+      "ts": "1718366500.000200"
+    },
+    {
+      "type": "message",
+      "subtype": "channel_join",
+      "user": "U004",
+      "text": "<@U004> has joined the channel",
+      "ts": "1718366600.000300"
+    },
+    {
+      "type": "message",
+      "subtype": "bot_message",
+      "bot_id": "B001",
+      "text": "Deploy finished",
+      "ts": "1718366700.000400"
+    }
+  ]
+}

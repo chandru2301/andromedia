@@ -1,0 +1,4 @@
+# Place git repositories here (or symlink) to index them from Docker.
+# Example:
+#   ln -s /path/to/my-service ./workspace/my-service
+# Then POST /api/v1/index with "localPath": "/workspace/my-service"

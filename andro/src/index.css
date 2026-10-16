@@ -1,0 +1,194 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+/*
+  Flat developer-tool theme, ported from andro-UI.
+
+  Surfaces are opaque and near-black (#0a0a0a base, #0f0f10 panel), separation
+  comes from 1px borders (#2a2a2a / #333333) and whitespace — never from blur,
+  translucency, tinted glows or drop shadows. Text runs #ededed / #a1a1a1 /
+  #878787, with small radii so controls read as dense tooling rather than cards.
+*/
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --card: #0f0f10;
+  --card-foreground: #ededed;
+  --border: #2a2a2a;
+  --border-subtle: #333333;
+
+  --primary: #58c760;
+  --primary-hover: #4bb352;
+  --primary-foreground: #0a0a0a;
+
+  --muted: #131315;
+  --muted-foreground: #a1a1a1;
+  --subtle-foreground: #878787;
+  --accent: #161618;
+  --accent-foreground: #ededed;
+
+  --destructive: #f56464;
+  --warning: #f99902;
+  --input: #2a2a2a;
+  --ring: #58c760;
+
+  --surface-hover: #ffffff1a;
+  --surface-active: #ffffff1a;
+  --code-bg: #080808;
+  --code-foreground: #bcbcbc;
+
+  --accent-green: #58c760;
+  --accent-yellow: #f99902;
+  --accent-red: #f56464;
+}
+
+/* Flat light companion — same geometry, no translucency. */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --background: #f7f6f3;
+  --foreground: #1a1917;
+  --card: #ffffff;
+  --card-foreground: #1a1917;
+  --border: #e2ded6;
+  --border-subtle: #d5d0c7;
+
+  --primary: #2f9e68;
+  --primary-hover: #28885a;
+  --primary-foreground: #ffffff;
+
+  --muted: #eeece7;
+  --muted-foreground: #6f6b63;
+  --subtle-foreground: #8a857c;
+  --accent: #e8e5df;
+  --accent-foreground: #1a1917;
+
+  --destructive: #dc2626;
+  --warning: #c2740a;
+  --input: #e2ded6;
+  --ring: #2f9e68;
+
+  --surface-hover: #0000000d;
+  --surface-active: #00000012;
+  --code-bg: #f0eee9;
+  --code-foreground: #3c3a36;
+
+  --accent-green: #2f9e68;
+  --accent-yellow: #c2740a;
+  --accent-red: #dc2626;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-warning: var(--warning);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-code: var(--code-bg);
+  --color-code-foreground: var(--code-foreground);
+
+  /* Reference radii stay small (4–7px) — controls, not cards. */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.4375rem;
+
+  --font-sans: 'Geist Variable', 'Geist', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', 'Geist Mono', 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* Flat surfaces: the theme never draws a shadow. */
+*,
+*::before,
+*::after {
+  box-shadow: none !important;
+}
+
+/* Thin, low-contrast scrollbars as in the reference app. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
+}
+
+button,
+[role='button'],
+a,
+summary,
+label[for] {
+  cursor: pointer;
+}
+
+button:disabled,
+[role='button'][aria-disabled='true'],
+[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 1px solid var(--muted-foreground);
+  outline-offset: 2px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in-from-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}

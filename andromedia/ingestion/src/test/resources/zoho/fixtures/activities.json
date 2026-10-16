@@ -1,0 +1,45 @@
+{
+  "tasks": {
+    "data": [
+      {
+        "id": "5001",
+        "Subject": "Send revised quote",
+        "Status": "Not Started",
+        "Description": "Include multi-year pricing option for Acme.",
+        "Modified_Time": "2026-07-12T10:00:00+05:30",
+        "$se_module": "Deals",
+        "What_Id": { "name": "Acme Platform Renewal", "id": "1001" }
+      }
+    ],
+    "info": { "page": 1, "per_page": 200, "count": 1, "more_records": false }
+  },
+  "calls": {
+    "data": [
+      {
+        "id": "5002",
+        "Subject": "Discovery call with Rajesh",
+        "Call_Type": "Outbound",
+        "Description": "Discussed CRM License Renewal scope and timeline.",
+        "Call_Start_Time": "2026-07-15T14:00:00+05:30",
+        "Modified_Time": "2026-07-15T15:00:00+05:30",
+        "$se_module": "Deals",
+        "What_Id": { "name": "CRM License Renewal", "id": "1005" }
+      }
+    ],
+    "info": { "page": 1, "per_page": 200, "count": 1, "more_records": false }
+  },
+  "events": {
+    "data": [
+      {
+        "id": "5003",
+        "Event_Title": "Softtwig expansion review",
+        "Description": "Quarterly business review with Priya.",
+        "Start_DateTime": "2026-07-08T11:00:00+05:30",
+        "Modified_Time": "2026-07-08T12:00:00+05:30",
+        "$se_module": "Deals",
+        "What_Id": { "name": "Softtwig Expansion", "id": "1004" }
+      }
+    ],
+    "info": { "page": 1, "per_page": 200, "count": 1, "more_records": false }
+  }
+}

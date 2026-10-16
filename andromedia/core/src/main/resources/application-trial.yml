@@ -1,0 +1,21 @@
+andromedia:
+  trial:
+    enabled: true
+    require-clerk-jwt: ${ANDRO_TRIAL_REQUIRE_CLERK_JWT:true}
+    clerk-jwks-url: ${ANDRO_CLERK_JWKS_URL:}
+    clerk-issuer: ${ANDRO_CLERK_ISSUER:}
+    dynamodb-table: ${ANDRO_TRIAL_DYNAMODB_TABLE:}
+    dynamodb-region: ${ANDRO_TRIAL_DYNAMODB_REGION:ap-south-1}
+  chat:
+    provider: openrouter
+    providers:
+      groq:
+        base-url: https://api.groq.com/openai/v1
+        model: ${GROQ_CHAT_MODEL:qwen/qwen3.8-27b}
+        api-key: ${GROQ_API_KEY:}
+      deepseek:
+        base-url: https://api.deepseek.com/v1
+        model: ${DEEPSEEK_CHAT_MODEL:deepseek-v4-flash}
+        api-key: ${DEEPSEEK_API_KEY:}
+      openrouter:
+        model: ${OPENROUTER_CHAT_MODEL:anthropic/claude-3-haiku}

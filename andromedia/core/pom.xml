@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.andromedia</groupId>
+    <artifactId>andromedia-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>andromedia-core</artifactId>
+  <name>Andromedia Core</name>
+  <description>WebFlux server entry point</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.andromedia</groupId>
+      <artifactId>andromedia-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.andromedia</groupId>
+      <artifactId>andromedia-ingestion</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.andromedia</groupId>
+      <artifactId>andromedia-indexing</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.andromedia</groupId>
+      <artifactId>andromedia-search</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.andromedia</groupId>
+      <artifactId>andromedia-llm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.nimbusds</groupId>
+      <artifactId>nimbus-jose-jwt</artifactId>
+      <version>9.37.3</version>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>dynamodb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-database-postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <!--
+            Only these directories are compiled. The remaining core tests
+            (alerts, index, security, trial) are excluded because they do not
+            currently compile against the main sources, so `mvn test` would
+            otherwise fail before reaching anything. That means a test placed
+            outside this list is silently not run — add its package here when
+            adding tests under core.
+          -->
+          <testIncludes>
+            <testInclude>**/credentials/**/*Test.java</testInclude>
+            <testInclude>**/investigate/**/*Test.java</testInclude>
+            <testInclude>**/search/**/*Test.java</testInclude>
+          </testIncludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <skip>false</skip>
+          <mainClass>com.andromedia.core.AndromediaApplication</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

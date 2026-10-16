@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: andromedia-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${ANDROMEDIA_DATABASE_NAME:-andromedia}
+      POSTGRES_USER: ${ANDROMEDIA_DATABASE_USER:-andromedia}
+      POSTGRES_PASSWORD: ${ANDROMEDIA_DATABASE_PASSWORD:-andromedia}
+    volumes:
+      - andromedia-postgres:/var/lib/postgresql/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${ANDROMEDIA_DATABASE_USER:-andromedia} -d ${ANDROMEDIA_DATABASE_NAME:-andromedia}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  andromedia-api:
+    build: .
+    container_name: andromedia-api
+    ports:
+      - "8083:8083"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      HOME: /home/andromedia
+      ANDROMEDIA_CREDENTIALS_POSTGRES_ENABLED: ${ANDROMEDIA_CREDENTIALS_POSTGRES_ENABLED:-true}
+      ANDROMEDIA_DATABASE_URL: jdbc:postgresql://postgres:5432/${ANDROMEDIA_DATABASE_NAME:-andromedia}
+      ANDROMEDIA_DATABASE_USER: ${ANDROMEDIA_DATABASE_USER:-andromedia}
+      ANDROMEDIA_DATABASE_PASSWORD: ${ANDROMEDIA_DATABASE_PASSWORD:-andromedia}
+    volumes:
+      - andromedia-data:/home/andromedia/.andromedia
+      # Read-only view of the code the API may index. Point ANDRO_WORKSPACE_DIR
+      # at the directory holding your repositories (e.g. ~/Documents/GitHub) so
+      # the app can offer them. Mounted read-only on purpose: the API indexes
+      # code, it never edits it.
+      - ${ANDRO_WORKSPACE_DIR:-./workspace}:/workspace:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  andromedia-data:
+  andromedia-postgres:

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.4.5</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>com.andromedia</groupId>
+  <artifactId>andromedia-parent</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Andromedia Parent</name>
+  <description>Multi-module Spring Boot scaffold for Andromedia</description>
+
+  <modules>
+    <module>common</module>
+    <module>ingestion</module>
+    <module>indexing</module>
+    <module>search</module>
+    <module>llm</module>
+    <module>core</module>
+    <module>cli</module>
+  </modules>
+
+  <properties>
+    <java.version>21</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <lucene.version>9.12.1</lucene.version>
+    <picocli.version>4.7.6</picocli.version>
+    <jgit.version>6.9.0.202403050737-r</jgit.version>
+    <aws.sdk.version>2.29.45</aws.sdk.version>
+    <!--
+      Tree-sitter grammars for code intelligence. The runtime binding bundles its
+      native libraries inside the jar and extracts them to ${user.home}/.tree-sitter
+      on first use, so HOME must be writable (the Dockerfile already sets it).
+    -->
+    <tree-sitter.version>0.24.5</tree-sitter.version>
+    <tree-sitter-typescript.version>0.21.1</tree-sitter-typescript.version>
+    <tree-sitter-javascript.version>0.21.2</tree-sitter-javascript.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>bom</artifactId>
+        <version>${aws.sdk.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.andromedia</groupId>
+        <artifactId>andromedia-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.andromedia</groupId>
+        <artifactId>andromedia-ingestion</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.andromedia</groupId>
+        <artifactId>andromedia-indexing</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.andromedia</groupId>
+        <artifactId>andromedia-search</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.andromedia</groupId>
+        <artifactId>andromedia-llm</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.andromedia</groupId>
+        <artifactId>andromedia-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.lucene</groupId>
+        <artifactId>lucene-core</artifactId>
+        <version>${lucene.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.lucene</groupId>
+        <artifactId>lucene-queryparser</artifactId>
+        <version>${lucene.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.lucene</groupId>
+        <artifactId>lucene-analysis-common</artifactId>
+        <version>${lucene.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>info.picocli</groupId>
+        <artifactId>picocli</artifactId>
+        <version>${picocli.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>info.picocli</groupId>
+        <artifactId>picocli-spring-boot-starter</artifactId>
+        <version>${picocli.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>info.picocli</groupId>
+        <artifactId>picocli-shell-jline3</artifactId>
+        <version>${picocli.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jgit</groupId>
+        <artifactId>org.eclipse.jgit</artifactId>
+        <version>${jgit.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.github.bonede</groupId>
+        <artifactId>tree-sitter</artifactId>
+        <version>${tree-sitter.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.github.bonede</groupId>
+        <artifactId>tree-sitter-typescript</artifactId>
+        <version>${tree-sitter-typescript.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.github.bonede</groupId>
+        <artifactId>tree-sitter-javascript</artifactId>
+        <version>${tree-sitter-javascript.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

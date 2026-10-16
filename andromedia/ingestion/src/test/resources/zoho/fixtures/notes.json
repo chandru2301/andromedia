@@ -1,0 +1,58 @@
+{
+  "data": [
+    {
+      "id": "4001",
+      "Note_Title": "Procurement discount ask",
+      "Note_Content": "Buyer asked for 15% multi-year discount. Follow up next week.",
+      "Modified_Time": "2026-07-11T09:00:00+05:30",
+      "Parent_Id": {
+        "module": { "api_name": "Deals", "id": "1000000000001" },
+        "name": "Acme Platform Renewal",
+        "id": "1001"
+      }
+    },
+    {
+      "id": "4002",
+      "Note_Title": "Champion note",
+      "Note_Content": "Priya confirmed expansion seats after pilot success.",
+      "Modified_Time": "2026-07-09T12:00:00+05:30",
+      "Parent_Id": {
+        "module": { "api_name": "Deals", "id": "1000000000001" },
+        "name": "Softtwig Expansion",
+        "id": "1004"
+      }
+    },
+    {
+      "id": "4003",
+      "Note_Title": "Renewal discussion",
+      "Note_Content": "Rajesh confirmed annual CRM subscription renewal timeline.",
+      "Modified_Time": "2026-07-16T08:00:00+05:30",
+      "Parent_Id": {
+        "name": "CRM License Renewal",
+        "id": "1005"
+      }
+    },
+    {
+      "id": "4005",
+      "Note_Title": null,
+      "Note_Content": "king can be have expected revenue upto 90k",
+      "Modified_Time": "2026-07-16T19:14:28+05:30",
+      "Parent_Id": {
+        "name": "Acme Platform Renewal",
+        "id": "1001"
+      }
+    },
+    {
+      "id": "4004",
+      "Note_Title": "Contact-only note",
+      "Note_Content": "Should be ignored for deal enrichment.",
+      "Modified_Time": "2026-07-10T10:00:00+05:30",
+      "Parent_Id": {
+        "module": { "api_name": "Contacts", "id": "1000000000002" },
+        "name": "Ravi Kumar",
+        "id": "3001"
+      }
+    }
+  ],
+  "info": { "page": 1, "per_page": 200, "count": 4, "more_records": false }
+}

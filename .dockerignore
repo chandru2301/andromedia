@@ -1,0 +1,14 @@
+.git
+**/target/
+**/.idea/
+**/.vscode/
+**/*.iml
+**/.DS_Store
+**/node_modules/
+docs/images/
+workspace/
+.env
+*.log
+.andromedia/
+cli/bin/
+STATUS.md

@@ -1,0 +1,45 @@
+target/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+*.class
+*.jar
+!**/src/main/**
+!**/src/test/**
+.DS_Store
+
+.env
+.claude/
+
+# Local Maven repository (never commit build cache)
+.m2/
+
+# tree-sitter extracts native libs here during tests
+.treesitter-home/
+
+# Electron spellcheck dictionary (generated at runtime)
+*.bdic
+
+# Runtime mount point for user repositories (./workspace:/workspace:ro).
+# Local projects indexed via the API belong here, not in version control.
+andromedia/workspace/
+.mcp.json
+.cursor/mcp.json
+.gemini/settings.json
+.kiro/settings/mcp.json
+opencode.jsonc
+opencode.json
+
+# added for chandru2301 repo
+.env
+.env.*
+!.env.example
+.cache/
+.m2/
+target/
+.next/
+dist/
+node_modules/
+*.jar

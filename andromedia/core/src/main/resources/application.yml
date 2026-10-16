@@ -1,0 +1,168 @@
+spring:
+  application:
+    name: andromedia
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    url: ${ANDROMEDIA_DATABASE_URL:jdbc:postgresql://localhost:5432/andromedia}
+    username: ${ANDROMEDIA_DATABASE_USER:andromedia}
+    password: ${ANDROMEDIA_DATABASE_PASSWORD:andromedia}
+
+server:
+  port: 8083
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+andromedia:
+  git:
+    max-commits: 1000
+  slack:
+    bot-token: ${SLACK_BOT_TOKEN:}
+    channels: []
+    lookback-days: 90
+    skip-bot-messages: true
+    max-messages-per-channel: 5000
+  alerts:
+    slack:
+      bot-token: ${ANDRO_ALERTS_SLACK_BOT_TOKEN:${SLACK_BOT_TOKEN:}}
+      channel: ${ANDRO_ALERTS_SLACK_CHANNEL:}
+      enabled-by-default: false
+  notion:
+    api-key: ${NOTION_API_KEY:}
+    page-ids: []
+    database-ids: []
+  jira:
+    base-url: ${JIRA_BASE_URL:}
+    email: ${JIRA_EMAIL:}
+    api-token: ${JIRA_API_TOKEN:}
+  linear:
+    api-key: ${LINEAR_API_KEY:}
+    team-keys: []
+  ranking:
+    test-penalty: 0.75
+    generated-penalty: 0.5
+    config-penalty: 0.85
+    main-source-boost: 1.15
+    service-listener-consumer-boost: 1.15
+    filename-exact-boost: 1.6
+    symbol-exact-boost: 1.35
+    semantic-min-score: 0.05
+    identifier-bm25-weight: 1.0
+    identifier-semantic-weight: 0.3
+    natural-language-bm25-weight: 0.6
+    natural-language-semantic-weight: 1.0
+    mixed-bm25-weight: 0.85
+    mixed-semantic-weight: 0.85
+    git-history-boost: 2.0
+    slack-decision-boost: 2.5
+    notion-architecture-boost: 2.0
+  zoho:
+    client-id: ${ZOHO_CLIENT_ID:}
+    client-secret: ${ZOHO_CLIENT_SECRET:}
+    refresh-token: ${ZOHO_REFRESH_TOKEN:}
+    region: ${ZOHO_REGION:com}
+    # Opt-in classic Zoho sandbox account names (King, Chapman, …). Disable for real production orgs.
+    sandbox-demo-signatures-enabled: true
+    # After changing demo detection or Next_Step fields, re-run Zoho ingest to refresh the Lucene index.
+    lookback-days: 90
+    min-quality-score: 0.35
+    max-retries: 5
+    retry-initial-delay-ms: 2000
+    retry-backoff-multiplier: 2.0
+    retry-min-delay-ms-for-429: 5000
+    retry-max-delay-ms: 60000
+    qualification:
+      probability-weight: 0.50
+      stage-weight: 0.30
+      freshness-weight: 0.20
+      stale-penalty: 0.15
+      overdue-penalty: 0.10
+      freshness-half-life-days: 30
+      stale-after-days: 180
+      active-stage-order:
+        - Qualification
+        - Needs Analysis
+        - Value Proposition
+        - Id. Decision Makers
+        - Proposal/Price Quote
+        - Negotiation/Review
+      closed-stage-markers:
+        - Closed Won
+        - Closed Lost
+        - Closed
+  context:
+    neighbor-line-window: 15
+    max-header-lines: 40
+  chat:
+    provider: ${ANDROMEDIA_CHAT_PROVIDER:deepseek}
+    max-output-tokens: 2048
+    temperature: 0.2
+    # Fail fast under provider rate limits so investigate does not hang for minutes.
+    max-retries: 2
+    retry-initial-delay-ms: 1000
+    retry-backoff-multiplier: 2.0
+    retry-min-delay-ms-for-429: 2000
+    retry-max-delay-ms: 10000
+    providers:
+      groq:
+        base-url: https://api.groq.com/openai/v1
+        model: ${GROQ_CHAT_MODEL:qwen/qwen3.8-27b}
+        api-key: ${GROQ_API_KEY:}
+      deepseek:
+        base-url: https://api.deepseek.com/v1
+        model: ${DEEPSEEK_CHAT_MODEL:deepseek-v4-flash}
+        api-key: ${DEEPSEEK_API_KEY:}
+      openrouter:
+        base-url: https://openrouter.ai/api/v1
+        model: ${OPENROUTER_CHAT_MODEL:meta-llama/llama-3.3-70b-instruct}
+        api-key: ${OPENROUTER_API_KEY:}
+        http-referer: ${OPENROUTER_HTTP_REFERER:}
+        app-title: ${OPENROUTER_APP_TITLE:Andromedia}
+      ollama:
+        base-url: ${OLLAMA_BASE_URL:http://127.0.0.1:11434/v1}
+        model: ${OLLAMA_CHAT_MODEL:qwen2.5-coder:7b}
+        api-key: ${OLLAMA_API_KEY:}
+  side-query:
+    enabled: true
+    model: qwen/qwen3.8-27b
+    max-output-tokens: 512
+    temperature: 0.0
+  ask:
+    retrieval-limit: 8
+    max-prompt-chars: 12000
+  embedding:
+    provider: openrouter
+    base-url: https://openrouter.ai/api/v1
+    model: openai/text-embedding-ada-002
+    dimensions: 1536
+    batch-size: 20
+    max-chars-per-batch: 200000
+    api-key: ${OPENROUTER_API_KEY:}
+    http-referer: ${OPENROUTER_HTTP_REFERER:}
+    app-title: ${OPENROUTER_APP_TITLE:Andromedia}
+  trial:
+    enabled: ${ANDRO_TRIAL_ENABLED:false}
+    max-queries-per-session: 20
+    session-ttl-hours: 168
+    chat-model: ${ANDRO_TRIAL_CHAT_MODEL:anthropic/claude-3-haiku}
+    max-starts-per-ip-hour: 10
+    require-clerk-jwt: ${ANDRO_TRIAL_REQUIRE_CLERK_JWT:true}
+    clerk-jwks-url: ${ANDRO_CLERK_JWKS_URL:}
+    clerk-issuer: ${ANDRO_CLERK_ISSUER:}
+    dynamodb-table: ${ANDRO_TRIAL_DYNAMODB_TABLE:}
+    dynamodb-region: ${ANDRO_TRIAL_DYNAMODB_REGION:ap-south-1}
+  rate-limit:
+    enabled: true
+    # Covers investigate + overview polling without blocking a normal trial UI session.
+    requests-per-minute: ${ANDRO_RATE_LIMIT_PER_MINUTE:30}
+  credentials:
+    # Base64-encoded 32-byte AES-256 key for Zoho OAuth vault (refresh token never returned to browser).
+    encryption-key: ${ANDROMEDIA_CREDENTIALS_ENCRYPTION_KEY:4l2v4m7xK0YdM9v7oQk7X1w0v8vQdN5QmQ0P6gY8K1M=}
+    # Local/dev only: generate an ephemeral key when encryption-key is blank (vault lost on restart).
+    allow-ephemeral-key: ${ANDROMEDIA_CREDENTIALS_ALLOW_EPHEMERAL_KEY:true}
+    # Persist integration + LLM secrets in PostgreSQL when true (set ANDROMEDIA_DATABASE_URL).
+    postgres-enabled: ${ANDROMEDIA_CREDENTIALS_POSTGRES_ENABLED:true}

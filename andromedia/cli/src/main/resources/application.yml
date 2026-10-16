@@ -1,0 +1,80 @@
+spring:
+  application:
+    name: andromedia-cli
+  main:
+    web-application-type: none
+    banner-mode: off
+    log-startup-info: false
+
+andromedia:
+  ranking:
+    test-penalty: 0.75
+    generated-penalty: 0.5
+    config-penalty: 0.85
+    main-source-boost: 1.15
+    service-listener-consumer-boost: 1.15
+    filename-exact-boost: 1.6
+    symbol-exact-boost: 1.35
+    semantic-min-score: 0.05
+    identifier-bm25-weight: 1.0
+    identifier-semantic-weight: 0.3
+    natural-language-bm25-weight: 0.6
+    natural-language-semantic-weight: 1.0
+    mixed-bm25-weight: 0.85
+    mixed-semantic-weight: 0.85
+    git-history-boost: 2.0
+  context:
+    neighbor-line-window: 15
+    max-header-lines: 40
+  chat:
+    provider: ${ANDROMEDIA_CHAT_PROVIDER:deepseek}
+    max-output-tokens: 2048
+    temperature: 0.2
+    max-retries: 5
+    retry-initial-delay-ms: 2000
+    retry-backoff-multiplier: 2.0
+    retry-min-delay-ms-for-429: 5000
+    retry-max-delay-ms: 60000
+    providers:
+      groq:
+        base-url: https://api.groq.com/openai/v1
+        model: ${GROQ_CHAT_MODEL:qwen/qwen3.8-27b}
+        api-key: ${GROQ_API_KEY:}
+      deepseek:
+        base-url: https://api.deepseek.com/v1
+        model: ${DEEPSEEK_CHAT_MODEL:deepseek-v4-flash}
+        api-key: ${DEEPSEEK_API_KEY:}
+      openrouter:
+        base-url: https://openrouter.ai/api/v1
+        model: ${OPENROUTER_CHAT_MODEL:meta-llama/llama-3.3-70b-instruct}
+        api-key: ${OPENROUTER_API_KEY:}
+        http-referer: ${OPENROUTER_HTTP_REFERER:}
+        app-title: ${OPENROUTER_APP_TITLE:Andromedia}
+      ollama:
+        base-url: ${OLLAMA_BASE_URL:http://127.0.0.1:11434/v1}
+        model: ${OLLAMA_CHAT_MODEL:qwen2.5-coder:7b}
+        api-key: ${OLLAMA_API_KEY:}
+  side-query:
+    enabled: true
+    model: qwen/qwen3.8-27b
+    max-output-tokens: 512
+    temperature: 0.0
+  ask:
+    retrieval-limit: 8
+    max-prompt-chars: 12000
+  embedding:
+    provider: openrouter
+    base-url: https://openrouter.ai/api/v1
+    model: openai/text-embedding-ada-002
+    dimensions: 1536
+    batch-size: 20
+    max-chars-per-batch: 200000
+    api-key: ${OPENROUTER_API_KEY:}
+    http-referer: ${OPENROUTER_HTTP_REFERER:}
+    app-title: ${OPENROUTER_APP_TITLE:Andromedia}
+
+logging:
+  file:
+    name: ${user.home}/.andromedia/logs/andro.log
+  level:
+    root: WARN

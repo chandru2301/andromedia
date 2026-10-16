@@ -1,0 +1,22 @@
+{
+  "name": "andro-mcp",
+  "version": "1.0.0",
+  "description": "Andro remote MCP server — proxies search/investigate to the Andromedia API",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:stdio": "MCP_TRANSPORT=stdio node server.js",
+    "start:context": "MCP_TRANSPORT=stdio node context-server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "express": "^5.2.1",
+    "ws": "^8.21.3",
+    "zod": "^3.25.76"
+  },
+  "license": "ISC"
+}

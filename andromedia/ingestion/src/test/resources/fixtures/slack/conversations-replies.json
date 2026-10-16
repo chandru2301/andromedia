@@ -1,0 +1,31 @@
+{
+  "ok": true,
+  "messages": [
+    {
+      "type": "message",
+      "user": "U001",
+      "text": "why are we seeing timeout cascades on the payment service every evening?",
+      "ts": "1718366400.000100",
+      "thread_ts": "1718366400.000100",
+      "reply_count": 2,
+      "reactions": [
+        { "name": "+1", "count": 5 },
+        { "name": "white_check_mark", "count": 2 }
+      ]
+    },
+    {
+      "type": "message",
+      "user": "U002",
+      "text": "traced it to the Feign client — sync call with no circuit breaker. spikes when order volume hits ~500/min",
+      "ts": "1718366410.000110",
+      "thread_ts": "1718366400.000100"
+    },
+    {
+      "type": "message",
+      "user": "U003",
+      "text": "we decided to switch to async Kafka publish. PR incoming tomorrow. see incident #47 for full context",
+      "ts": "1718366420.000120",
+      "thread_ts": "1718366400.000100"
+    }
+  ]
+}
